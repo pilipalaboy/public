@@ -1,22 +1,22 @@
 package DataTest;
-        import com.csvreader.CsvReader;
-        import com.csvreader.CsvWriter;
+import com.csvreader.CsvReader;
+import com.csvreader.CsvWriter;
 
-        import java.io.*;
-        import java.nio.charset.Charset;
-        import java.util.regex.Matcher;
-        import java.util.regex.Pattern;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
-public class test02 {
+public class test03 {
     public static void main(String[] args) throws IOException {
-        String filePath = "D:\\资料\\安装资料\\任务\\jobs2.csv";
+        String filePath = "D:\\资料\\安装资料\\任务\\jobs3.csv";
         InputStream in = new FileInputStream(filePath);
         CsvReader cr = new CsvReader(in, Charset.forName("utf-8"));
 
         // 读表头
         cr.readHeaders();
-        String filePath2 = "D:\\资料\\安装资料\\任务\\2.csv";
+        String filePath2 = "D:\\资料\\安装资料\\任务\\3.csv";
         // 创建CSV写对象
         CsvWriter cs = new CsvWriter(filePath2,',', Charset.forName("utf-8"));
 
@@ -34,13 +34,16 @@ public class test02 {
                     continue;
                 }
                 s[j] = cr.get(i);
+                if(i==7){
+                    s[j]=s[j].replace("及以上","").replace("统招","").replace("学历","");
+                }
                 if(i==11){
-                    if(s[j].contains("以上")){continue;}
-                    s[j]=s[j].replace("k","").replace("K","");
+                    if(s[j].contains("面议")){continue;}
+                    s[j]=s[j].replace("万","0");
                     String[] s2 =s[j].split("-");
-                    s[j]=s2[0];
+                    s[j]= String.valueOf((Double.valueOf(s2[0])*10)/12);
                     j+=1;
-                    s[j]=s2[1];
+                    s[j]=String.valueOf(Double.valueOf(s2[1])/12);;
                 }
                 Pattern p = Pattern.compile("\\s+|\t+|\n\r");
                 Matcher m = p.matcher(s[j]);
